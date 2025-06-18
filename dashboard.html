@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外贸出口合同管理系统 - 仪表盘</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <!-- 自定义样式 -->
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        /* 减小卡片尺寸的额外样式 */
+        .stats-card {
+            padding: 0.75rem;
+        }
+        
+        .stats-card i {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stats-card .stats-number {
+            font-size: 1.2rem;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        /* 确保图表不会太高 */
+        #salesPurchaseChart, #contractStatusChart, #supplierChart {
+            max-height: 220px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="bi bi-globe me-2"></i>外贸出口合同管理系统
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="切换导航菜单">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell me-1"></i>
+                            <span class="badge rounded-pill bg-danger">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">通知</h6></li>
+                            <li><a class="dropdown-item" href="#">3个账期将在本周到期</a></li>
+                            <li><a class="dropdown-item" href="#">2个新销售合同待审批</a></li>
+                            <li><a class="dropdown-item" href="#">1个采购合同有更新</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">查看所有通知</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i> 管理员
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>个人资料</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>设置</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边导航栏 -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="dashboard.html">
+                                <i class="bi bi-speedometer2"></i> 仪表盘
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contracts.html">
+                                <i class="bi bi-file-earmark-text"></i> 合同管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="purchase-contracts.html">
+                                <i class="bi bi-cart"></i> 采购合同
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="sales-contracts.html">
+                                <i class="bi bi-cash-coin"></i> 销售合同
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="accounts.html">
+                                <i class="bi bi-wallet2"></i> 应收应付
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="suppliers.html">
+                                <i class="bi bi-building"></i> 供应商管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html">
+                                <i class="bi bi-bar-chart"></i> 报表中心
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="bi bi-gear"></i> 系统设置
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主内容区域 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="bi bi-speedometer2 me-2"></i>仪表盘</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-share"></i> 导出
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-printer"></i> 打印
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center">
+                            <i class="bi bi-calendar me-1"></i> 本季度
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="row mb-3">
+                    <div class="col-md-3 col-sm-6 mb-2">
+                        <div class="card h-100 border-0">
+                            <div class="card-body stats-card stats-card-primary">
+                                <i class="bi bi-file-earmark-check"></i>
+                                <div class="stats-number">42</div>
+                                <div class="stats-text">有效合同总数</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-2">
+                        <div class="card h-100 border-0">
+                            <div class="card-body stats-card stats-card-success">
+                                <i class="bi bi-currency-yen"></i>
+                                <div class="stats-number">¥1,285,600</div>
+                                <div class="stats-text">本月销售额</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-2">
+                        <div class="card h-100 border-0">
+                            <div class="card-body stats-card stats-card-info">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                <div class="stats-number">¥382,450</div>
+                                <div class="stats-text">本月净利润</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-2">
+                        <div class="card h-100 border-0">
+                            <div class="card-body stats-card stats-card-warning">
+                                <i class="bi bi-clock-history"></i>
+                                <div class="stats-number">8</div>
+                                <div class="stats-text">账期即将到期</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- 销售与采购趋势图 -->
+                    <div class="col-lg-8 mb-3">
+                        <div class="card border-0 h-100">
+                            <div class="card-header bg-transparent border-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">销售与采购趋势</h5>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="chartTimeRange" data-bs-toggle="dropdown">
+                                            最近6个月
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartTimeRange">
+                                            <li><a class="dropdown-item" href="#">最近3个月</a></li>
+                                            <li><a class="dropdown-item" href="#">最近6个月</a></li>
+                                            <li><a class="dropdown-item" href="#">最近1年</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="salesPurchaseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 合同状态分布 -->
+                    <div class="col-lg-4 mb-3">
+                        <div class="card border-0 h-100">
+                            <div class="card-header bg-transparent border-0">
+                                <h5 class="card-title mb-0">合同状态分布</h5>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <canvas id="contractStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- 待处理事项 -->
+                    <div class="col-lg-6 mb-3">
+                        <div class="card border-0 h-100">
+                            <div class="card-header bg-transparent border-0">
+                                <h5 class="card-title mb-0">待处理事项</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                                        <div>
+                                            <div class="fw-bold">采购合同审批</div>
+                                            <small class="text-muted">美国供应商A公司 - 订单号: PO-2023-0458</small>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">今天</span>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                                        <div>
+                                            <div class="fw-bold">应收账款到期</div>
+                                            <small class="text-muted">日本客户B公司 - 合同号: SC-2023-0125</small>
+                                        </div>
+                                        <span class="badge bg-warning rounded-pill">2天后</span>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                                        <div>
+                                            <div class="fw-bold">销售合同确认</div>
+                                            <small class="text-muted">德国客户C公司 - 合同号: SC-2023-0189</small>
+                                        </div>
+                                        <span class="badge bg-info rounded-pill">3天后</span>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                                        <div>
+                                            <div class="fw-bold">应付账款支付</div>
+                                            <small class="text-muted">韩国供应商D公司 - 订单号: PO-2023-0342</small>
+                                        </div>
+                                        <span class="badge bg-danger rounded-pill">5天后</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 供应商采购汇总 -->
+                    <div class="col-lg-6 mb-3">
+                        <div class="card border-0 h-100">
+                            <div class="card-header bg-transparent border-0">
+                                <h5 class="card-title mb-0">供应商采购汇总 (前5名)</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="supplierChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近合同 -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card border-0">
+                            <div class="card-header bg-transparent border-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">最近合同</h5>
+                                    <a href="contracts.html" class="btn btn-sm btn-outline-primary">查看全部</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>合同编号</th>
+                                                <th>类型</th>
+                                                <th>公司</th>
+                                                <th>金额</th>
+                                                <th>签订日期</th>
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><a href="contracts.html" class="text-decoration-none">SC-2023-0189</a></td>
+                                                <td><span class="badge bg-success">销售</span></td>
+                                                <td>德国客户C公司</td>
+                                                <td>€45,800</td>
+                                                <td>2023-06-15</td>
+                                                <td><span class="badge bg-warning">待确认</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="contracts.html" class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                                        <a href="#" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                                        <a href="#" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="purchase-contracts.html" class="text-decoration-none">PO-2023-0458</a></td>
+                                                <td><span class="badge bg-primary">采购</span></td>
+                                                <td>美国供应商A公司</td>
+                                                <td>$32,450</td>
+                                                <td>2023-06-12</td>
+                                                <td><span class="badge bg-info">待审批</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="purchase-contracts.html" class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                                        <a href="#" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                                        <a href="#" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="sales-contracts.html" class="text-decoration-none">SC-2023-0188</a></td>
+                                                <td><span class="badge bg-success">销售</span></td>
+                                                <td>韩国客户E公司</td>
+                                                <td>₩18,750,000</td>
+                                                <td>2023-06-10</td>
+                                                <td><span class="badge bg-success">已确认</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="sales-contracts.html" class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                                        <a href="#" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                                        <a href="#" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="purchase-contracts.html" class="text-decoration-none">PO-2023-0457</a></td>
+                                                <td><span class="badge bg-primary">采购</span></td>
+                                                <td>日本供应商F公司</td>
+                                                <td>¥2,850,000</td>
+                                                <td>2023-06-08</td>
+                                                <td><span class="badge bg-success">已确认</span></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="purchase-contracts.html" class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                                        <a href="#" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                                        <a href="#" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <!-- 自定义JS -->
+    <script src="js/dashboard.js"></script>
+</body>
+</html> 

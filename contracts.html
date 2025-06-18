@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外贸出口合同管理系统 - 合同管理</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- 自定义样式 -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="bi bi-globe me-2"></i>外贸出口合同管理系统
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="切换导航菜单">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell me-1"></i>
+                            <span class="badge rounded-pill bg-danger">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">通知</h6></li>
+                            <li><a class="dropdown-item" href="#">3个账期将在本周到期</a></li>
+                            <li><a class="dropdown-item" href="#">2个新销售合同待审批</a></li>
+                            <li><a class="dropdown-item" href="#">1个采购合同有更新</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">查看所有通知</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i> 管理员
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>个人资料</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>设置</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边导航栏 -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <i class="bi bi-speedometer2"></i> 仪表盘
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="contracts.html">
+                                <i class="bi bi-file-earmark-text"></i> 合同管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="purchase-contracts.html">
+                                <i class="bi bi-cart"></i> 采购合同
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="sales-contracts.html">
+                                <i class="bi bi-cash-coin"></i> 销售合同
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="accounts.html">
+                                <i class="bi bi-wallet2"></i> 应收应付
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="suppliers.html">
+                                <i class="bi bi-building"></i> 供应商管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html">
+                                <i class="bi bi-bar-chart"></i> 报表中心
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html">
+                                <i class="bi bi-gear"></i> 系统设置
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主内容区域 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="bi bi-file-earmark-text me-2"></i>合同管理</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exportModal">
+                                <i class="bi bi-file-earmark-excel"></i> 导出
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-printer"></i> 打印
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newContractModal">
+                            <i class="bi bi-plus-circle"></i> 新建合同
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 筛选面板 -->
+                <div class="card mb-4 border-0">
+                    <div class="card-body">
+                        <form class="row g-3">
+                            <div class="col-md-3">
+                                <label for="contractType" class="form-label">合同类型</label>
+                                <select class="form-select" id="contractType">
+                                    <option value="" selected>全部</option>
+                                    <option value="sales">销售合同</option>
+                                    <option value="purchase">采购合同</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="contractStatus" class="form-label">合同状态</label>
+                                <select class="form-select" id="contractStatus">
+                                    <option value="" selected>全部</option>
+                                    <option value="confirmed">已确认</option>
+                                    <option value="pending">待确认</option>
+                                    <option value="approving">待审批</option>
+                                    <option value="cancelled">已取消</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="dateRange" class="form-label">日期范围</label>
+                                <select class="form-select" id="dateRange">
+                                    <option value="all" selected>全部时间</option>
+                                    <option value="today">今天</option>
+                                    <option value="thisWeek">本周</option>
+                                    <option value="thisMonth">本月</option>
+                                    <option value="lastMonth">上个月</option>
+                                    <option value="thisQuarter">本季度</option>
+                                    <option value="thisYear">今年</option>
+                                    <option value="custom">自定义...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="searchText" class="form-label">搜索</label>
+                                <input type="text" class="form-control" id="searchText" placeholder="合同编号/公司名称">
+                            </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="bi bi-search"></i> 搜索
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-counterclockwise"></i> 重置
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 合同表格 -->
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="selectAll">
+                                                <label class="form-check-label" for="selectAll"></label>
+                                            </div>
+                                        </th>
+                                        <th>合同编号</th>
+                                        <th>类型</th>
+                                        <th>公司名称</th>
+                                        <th>合同金额</th>
+                                        <th>签订日期</th>
+                                        <th>截止日期</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td><a href="#" class="text-decoration-none">SC-2023-0189</a></td>
+                                        <td><span class="badge bg-success">销售</span></td>
+                                        <td>德国客户C公司</td>
+                                        <td>€45,800</td>
+                                        <td>2023-06-15</td>
+                                        <td>2023-12-15</td>
+                                        <td><span class="badge bg-warning">待确认</span></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    操作
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>查看详情</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>打印</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard-check me-2"></i>审批</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td><a href="#" class="text-decoration-none">PO-2023-0458</a></td>
+                                        <td><span class="badge bg-primary">采购</span></td>
+                                        <td>美国供应商A公司</td>
+                                        <td>$32,450</td>
+                                        <td>2023-06-12</td>
+                                        <td>2023-09-12</td>
+                                        <td><span class="badge bg-info">待审批</span></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    操作
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>查看详情</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>打印</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard-check me-2"></i>审批</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td><a href="#" class="text-decoration-none">SC-2023-0188</a></td>
+                                        <td><span class="badge bg-success">销售</span></td>
+                                        <td>韩国客户E公司</td>
+                                        <td>₩18,750,000</td>
+                                        <td>2023-06-10</td>
+                                        <td>2023-12-10</td>
+                                        <td><span class="badge bg-success">已确认</span></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    操作
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>查看详情</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>打印</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard-check me-2"></i>审批</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td><a href="#" class="text-decoration-none">PO-2023-0457</a></td>
+                                        <td><span class="badge bg-primary">采购</span></td>
+                                        <td>日本供应商F公司</td>
+                                        <td>¥2,850,000</td>
+                                        <td>2023-06-08</td>
+                                        <td>2023-09-08</td>
+                                        <td><span class="badge bg-success">已确认</span></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    操作
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>查看详情</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>打印</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard-check me-2"></i>审批</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td><a href="#" class="text-decoration-none">SC-2023-0187</a></td>
+                                        <td><span class="badge bg-success">销售</span></td>
+                                        <td>英国客户H公司</td>
+                                        <td>£28,500</td>
+                                        <td>2023-06-05</td>
+                                        <td>2023-12-05</td>
+                                        <td><span class="badge bg-success">已确认</span></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    操作
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>查看详情</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>打印</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard-check me-2"></i>审批</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 分页 -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                显示 <span class="fw-bold">1-5</span> 条，共 <span class="fw-bold">42</span> 条记录
+                            </div>
+                            <nav aria-label="分页导航">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 新建合同模态框 -->
+    <div class="modal fade" id="newContractModal" tabindex="-1" aria-labelledby="newContractModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newContractModalLabel">新建合同</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="contractTypeRadio" id="salesContract" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="salesContract">销售合同</label>
+                            <input type="radio" class="btn-check" name="contractTypeRadio" id="purchaseContract" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="purchaseContract">采购合同</label>
+                        </div>
+                    </div>
+                    <form id="newContractForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="contractNumber" class="form-label">合同编号</label>
+                                <input type="text" class="form-control" id="contractNumber" value="SC-2023-0190" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="companySelect" class="form-label">选择公司</label>
+                                <select class="form-select" id="companySelect" required>
+                                    <option value="" selected disabled>请选择客户公司</option>
+                                    <option value="1">德国客户C公司</option>
+                                    <option value="2">韩国客户E公司</option>
+                                    <option value="3">英国客户H公司</option>
+                                    <option value="4">美国客户J公司</option>
+                                    <option value="5">法国客户K公司</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contractDate" class="form-label">签订日期</label>
+                                <input type="date" class="form-control" id="contractDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dueDate" class="form-label">截止日期</label>
+                                <input type="date" class="form-control" id="dueDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contractCurrency" class="form-label">币种</label>
+                                <select class="form-select" id="contractCurrency" required>
+                                    <option value="CNY">人民币 (CNY)</option>
+                                    <option value="USD">美元 (USD)</option>
+                                    <option value="EUR">欧元 (EUR)</option>
+                                    <option value="GBP">英镑 (GBP)</option>
+                                    <option value="JPY">日元 (JPY)</option>
+                                    <option value="KRW">韩元 (KRW)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contractAmount" class="form-label">合同金额</label>
+                                <input type="number" class="form-control" id="contractAmount" required min="0" step="0.01">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="paymentTerms" class="form-label">付款条件</label>
+                                <select class="form-select" id="paymentTerms">
+                                    <option value="advance">预付款</option>
+                                    <option value="net30">30天账期</option>
+                                    <option value="net60">60天账期</option>
+                                    <option value="net90">90天账期</option>
+                                    <option value="custom">自定义</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="deliveryMethod" class="form-label">交付方式</label>
+                                <select class="form-select" id="deliveryMethod">
+                                    <option value="fob">FOB</option>
+                                    <option value="cif">CIF</option>
+                                    <option value="exw">EXW</option>
+                                    <option value="dap">DAP</option>
+                                    <option value="ddp">DDP</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="contractDescription" class="form-label">合同描述</label>
+                                <textarea class="form-control" id="contractDescription" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="attachments" class="form-label">上传附件</label>
+                                <input class="form-control" type="file" id="attachments" multiple>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-success">保存并提交审批</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导出模态框 -->
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">导出合同数据</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">导出格式</label>
+                            <div class="d-flex">
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="radio" name="exportFormat" id="formatExcel" checked>
+                                    <label class="form-check-label" for="formatExcel">Excel (.xlsx)</label>
+                                </div>
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="radio" name="exportFormat" id="formatCsv">
+                                    <label class="form-check-label" for="formatCsv">CSV (.csv)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exportFormat" id="formatPdf">
+                                    <label class="form-check-label" for="formatPdf">PDF (.pdf)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">导出选项</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="exportOption" id="exportAll" checked>
+                                <label class="form-check-label" for="exportAll">导出全部数据</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="exportOption" id="exportFiltered">
+                                <label class="form-check-label" for="exportFiltered">导出筛选后的数据</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exportOption" id="exportSelected">
+                                <label class="form-check-label" for="exportSelected">导出选中的数据</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">导出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
